@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TRUNS } from "../constants";
 import confetti from "canvas-confetti";
 import { resetGameStorage, saveGameToStorage } from "../logic/storage";
@@ -22,11 +22,32 @@ export function useBoard() {
     return winnerFromStorage ? winnerFromStorage : null;
   });
 
+  const [scoreX, setScoreX] = useState(0);
+  const [scoreO, setScoreO] = useState(0);
+
+  const [fullGameWinner, setFullGameWinner] = useState(null);
+
+  useEffect(() => {
+    if (scoreX === 3) {
+      setFullGameWinner(TRUNS.X);
+      setScoreO(0);
+      setScoreX(0);
+      confetti();
+    }
+
+    if (scoreO === 3) {
+      setFullGameWinner(TRUNS.O);
+      setScoreO(0);
+      setScoreX(0);
+      confetti();
+    }
+  }, [scoreX, scoreO]);
+
   const resetGame = () => {
     setBoard(Array(9).fill(null));
     setTurn(TRUNS.X);
     setWinner(null);
-
+    setFullGameWinner(null);
     resetGameStorage();
   };
 
@@ -39,8 +60,9 @@ export function useBoard() {
     const newWinner = checkWinner(newBoard);
 
     if (newWinner) {
-      confetti();
+      // confetti();
       setWinner(newWinner);
+      newWinner === TRUNS.X ? setScoreX(scoreX + 1) : setScoreO(scoreO + 1);
     } else if (checkEndGame(newBoard)) {
       setWinner(false);
     }
@@ -49,13 +71,21 @@ export function useBoard() {
     setTurn(newTurn);
     setBoard(newBoard);
 
-    
     saveGameToStorage({
-        board: newBoard,
-        turn: newTurn,
-        winner: newWinner !== null ? newWinner : null,
-      });
+      board: newBoard,
+      turn: newTurn,
+      winner: newWinner !== null ? newWinner : null,
+    });
   };
 
-  return { board, turn, winner, resetGame, updateBoard };
+  return {
+    board,
+    turn,
+    winner,
+    resetGame,
+    updateBoard,
+    scoreX,
+    scoreO,
+    fullGameWinner,
+  };
 }

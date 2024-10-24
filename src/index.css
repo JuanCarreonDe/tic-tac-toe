@@ -116,6 +116,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 20px;
+  padding: 5px;
 }
 
 .winner .win {
@@ -138,6 +139,10 @@ body {
   font-size: 48px;
   transition-property: background, transform;
   transition: 0.3s ease-in-out;
+}
+
+.score {
+  margin: 10px 0;
 }
 
 @media (hover: hover) {
