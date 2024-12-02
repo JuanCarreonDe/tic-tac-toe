@@ -79,6 +79,7 @@ body {
   width: fit-content;
   position: relative;
   border-radius: 10px;
+  width: 100%;
 }
 
 .turn .square,
@@ -89,6 +90,7 @@ body {
   border-color: transparent;
 }
 
+.level .is-selected,
 .square.is-selected {
   color: #222;
   background: #eee;
@@ -143,6 +145,21 @@ body {
 
 .score {
   margin: 10px 0;
+}
+
+.turn-section {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+.timeLeft {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.level button {
+  margin: 10px;
 }
 
 @media (hover: hover) {

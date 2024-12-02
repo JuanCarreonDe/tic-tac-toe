@@ -14,11 +14,16 @@ function App() {
     scoreX,
     scoreO,
     fullGameWinner,
+    timeLeft,
+    setUseTimer,
+    useTimer,
   } = useBoard();
+  console.log("🚀 ~ App ~ useTimer:", useTimer);
 
   return (
     <main className="board">
       <h1>Tic tac toe</h1>
+
       <Score scoreO={scoreO} scoreX={scoreX} />
       <section className="game">
         {board?.map((_, i) => {
@@ -29,9 +34,27 @@ function App() {
           );
         })}
       </section>
-      <section className="turn">
-        <Square isSelected={turn === TRUNS.X}>{TRUNS.X}</Square>
-        <Square isSelected={turn === TRUNS.O}>{TRUNS.O}</Square>
+      <section className="turn-section">
+        <span className="timeLeft">{timeLeft}</span>
+        <div className="turn">
+          <Square isSelected={turn === TRUNS.X}>{TRUNS.X}</Square>
+          <Square isSelected={turn === TRUNS.O}>{TRUNS.O}</Square>
+        </div>
+        <div className="level">
+          {/* <h3>Nivel</h3> */}
+          <button
+            className={`${!useTimer && "is-selected"}`}
+            onClick={() => setUseTimer(false)}
+          >
+            Fácil
+          </button>
+          <button
+            className={`${useTimer && "is-selected"}`}
+            onClick={() => setUseTimer(true)}
+          >
+            Difícil
+          </button>
+        </div>
       </section>
       <WinnerModal
         resetGame={resetGame}

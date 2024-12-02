@@ -27,6 +27,28 @@ export function useBoard() {
 
   const [fullGameWinner, setFullGameWinner] = useState(null);
 
+  const [timeLeft, setTimeLeft] = useState(15);
+  const [useTimer, setUseTimer] = useState(false); // Estado para habilitar o deshabilitar el temporizador
+
+  useEffect(() => {
+    if (!useTimer || winner || checkEndGame(board)) return; // Solo usar el temporizador si está habilitado
+
+    setTimeLeft(15); // Reiniciar el temporizador al inicio de un turno
+
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev === 1) {
+          const newTurn = turn === TRUNS.X ? TRUNS.O : TRUNS.X;
+          setTurn(newTurn);
+          return 15;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [turn, board, winner, useTimer]);
+
   useEffect(() => {
     if (scoreX === 3) {
       setFullGameWinner(TRUNS.X);
@@ -60,7 +82,6 @@ export function useBoard() {
     const newWinner = checkWinner(newBoard);
 
     if (newWinner) {
-      // confetti();
       setWinner(newWinner);
       newWinner === TRUNS.X ? setScoreX(scoreX + 1) : setScoreO(scoreO + 1);
     } else if (checkEndGame(newBoard)) {
@@ -87,5 +108,8 @@ export function useBoard() {
     scoreX,
     scoreO,
     fullGameWinner,
+    timeLeft,
+    useTimer,
+    setUseTimer, // Exponer función para activar o desactivar el temporizador
   };
 }
